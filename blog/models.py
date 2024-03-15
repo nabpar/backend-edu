@@ -43,7 +43,7 @@ class Comment(models.Model):
         related_name="Resourceuploader_from_blog",
         null=True,
     )
-    # upload_file = models.FilePathField()
+    
     name = models.CharField(max_length=255)
     body = models.TextField()
     date_added = models.DateTimeField(auto_now_add=True)

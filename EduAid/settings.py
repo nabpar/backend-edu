@@ -55,7 +55,8 @@ CUSTOM_APPS = [
     "blog",
     'srm',
     'students',
-    'tinymce'
+    'tinymce',
+    'user'
 
 ]
 INSTALLED_APPS += CUSTOM_APPS

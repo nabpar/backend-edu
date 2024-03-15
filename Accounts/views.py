@@ -21,6 +21,7 @@ from Accounts.serializers import (
     ProfileSerializer
 )
 
+
 # Create your views here.
 
 
@@ -61,6 +62,7 @@ class UserRegistrationView(APIView):
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            # role = serializer.validated_data.get(role)
             user = serializer.save()
             # extracting user id from the registered user
             uid = user.id
@@ -114,21 +116,67 @@ class UserLoginView(APIView):
             password = serializer.data.get("password")
             user = authenticate(email=email, password=password)
             if user is not None:
-                token = get_tokens_for_user(user)
-                return Response(
-                    {"token": token, "msg": "login succesful"},
-                    status=status.HTTP_200_OK,
-                )
-            else:
-                return Response(
-                    {
-                        "errors": {
-                            "non_field_errors": ["email or password is not valid"]
-                        }
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+               
+                # token = get_tokens_for_user(user)
+                if user.role == User.Roles.STUDENT:
+                    return Response({"msg": "Login successful for student"}, status=status.HTTP_200_OK)
+                
+                elif user.role== User.Roles.ADMIN:
+                    return Response({"msg": "Login successful for admin"}, status=status.HTTP_200_OK)
+                
+                elif user.role == User.Roles.TEACHER :
+                    return Response({"msg": "Login successful for teacher"}, status=status.HTTP_200_OK)
+                else:
+                    return Response({"msg":"user role is unknown"}, status=status.HTTP_403_FORBIDDEN)
+            else:       
+                return Response({"msg": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    
+            #     return Response(
+            #         {"token": token, "msg": "login succesful"},
+            #         status=status.HTTP_200_OK,
+            #     )
+        # else:
+        #         return Response(
+        #             {
+        #                 "errors": {
+        #                     "non_field_errors": ["email or password is not valid"]
+        #                 }
+        #             },
+        #             status=status.HTTP_400_BAD_REQUEST,
+                # )
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+        # if user:
+        #         if user.role == User.Roles.STUDENT:
+        #             return Response({"msg": "Login successful for student"}, status=status.HTTP_200_OK)
+                
+        #         elif user.role == User.Roles.ADMIN:
+        #             return Response({"msg": "Login successful for admin"}, status=status.HTTP_200_OK)
+                
+        #         elif user.role == User.Roles.TEACHER :
+        #             return Response({"msg": "Login successful for teacher"}, status=status.HTTP_200_OK)
+                
+        # return Response({"msg": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    
+
+    # def post(self,request,format = None):
+            # email = request.data.get("email")
+            # password = request.data.get("password")
+            # print("hello")
+            # user = authenticate(email = email, password = password)
+            # if user:
+            #     if user.role == User.Roles.STUDENT:
+            #         return Response({"msg": "Login successful for student"}, status=status.HTTP_200_OK)
+                
+            #     elif user.role == User.Roles.ADMIN:
+            #         return Response({"msg": "Login successful for admin"}, status=status.HTTP_200_OK)
+                
+            #     elif user.role == User.Roles.TEACHER :
+            #         return Response({"msg": "Login successful for teacher"}, status=status.HTTP_200_OK)
+                
+            # return Response({"msg": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 

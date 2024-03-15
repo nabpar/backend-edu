@@ -49,6 +49,7 @@ urlpatterns = [
     path('',include("admins.urls")),
     path('',include("Accounts.urls")),
     path('',include("students.urls")),
+    path('',include("user.urls")),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     # path('verification/', include('verify_email.urls')),	
 ]

@@ -13,6 +13,7 @@ class Advertisment(models.Model):
     company_name = models.CharField(max_length=255)
     area = models.CharField(max_length=255,choices=Area_Choice,default=1)
     price = models.PositiveIntegerField(null=True,blank=True)
+    # video = models.FileField(upload_to=) image/gif
     start_time= models.DateTimeField(default = timezone.now())
     end_time  = models.DateTimeField()
 

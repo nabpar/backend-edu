@@ -1,4 +1,4 @@
-from .models import Category,Subject,Syllabus,ContactLeads
+from .models import Category,Subject,Syllabus,ContactLeads,Topic,Subtopic
 from rest_framework import serializers
 from .file_upload import Uploader
 
@@ -93,19 +93,19 @@ class Subject_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# #Topic Serialization
+#Topic Serialization
 
-# class Topic_Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model =  Topic
-#         fields = '__all__' 
+class Topic_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model =  Topic
+        fields = '__all__' 
 
-# # Subtopic serializer        
+# Subtopic serializer        
 
-# class Subtopic_Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Subtopic
-#         fields = '__all__' 
+class Subtopic_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subtopic
+        fields = '__all__' 
 
 # Syllabus Serializer
 class Syllabus_Serializer(serializers.ModelSerializer):

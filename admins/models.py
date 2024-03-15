@@ -35,6 +35,38 @@ class Subject(BaseClass):
 
     def __str__(self):
         return self.name   
+    
+
+
+class Topic(BaseClass):
+    category = models.ForeignKey(Category, on_delete= models.CASCADE,default=1)
+    subject = models.ForeignKey(Subject, on_delete= models.CASCADE,default=1)
+    # name
+    # content = 
+    # added_by = teacher
+    # updated_by
+    # status = enum  verify unverified default un verified.
+    # publish = 
+    # un_publish
+    # publis
+
+
+
+    def __str__(self):
+        return self.name
+
+    class Meta(BaseClass.Meta):
+        db_table = "admins_topic"
+
+
+class Subtopic(BaseClass):
+    category=models.ForeignKey(Category,on_delete=models.CASCADE)
+    subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
+    topic=models.ForeignKey(Topic,on_delete=models.CASCADE)
+    slug=models.SlugField(blank= True, null= True)
+
+    def __str__(self):
+        return self.name
  
     
 class Syllabus(BaseClass):

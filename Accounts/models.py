@@ -20,7 +20,8 @@ class UserManager(BaseUserManager):
             contact = contact,
             role = role, # defingig the role of a user
         )
-        user.is_admin = True
+        if  role in [User.Roles.TEACHER ,User.Roles.ADMIN] :
+            user.is_admin = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -47,6 +48,7 @@ class User(AbstractBaseUser):
 
     class Roles(models.TextChoices):
         STUDENT='STUDENT'
+        TEACHER = 'TEACHER'
         ADMIN='ADMIN'
 
     email = models.EmailField(
@@ -57,7 +59,7 @@ class User(AbstractBaseUser):
     )
     name = models.CharField(max_length=64, validators=[isalphavalidator])
     contact = models.BigIntegerField(blank=True,null=True)
-    role = models.CharField(choices=Roles.choices,max_length=10,default=Roles.STUDENT)
+    role = models.CharField(choices=Roles.choices,max_length=10,default = Roles.STUDENT)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     # is_teacher = models.BooleanField(default = False)

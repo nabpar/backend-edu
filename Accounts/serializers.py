@@ -19,7 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["name", "email", 'contact',"password", "password2"]
+        # fields = ["name", "email", 'contact',"password", "password2","role",]
+        fields = '__all__'
         extra_kwargs = {"password2": {"write_only": True}}
 
     def validate(self, attrs):
@@ -30,10 +31,20 @@ class UserSerializer(serializers.ModelSerializer):
                 "password and confirm passworrd doesnt match"
             )
         return attrs
+    
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)
+    
 
-    def create(self, validate_data):
-        validate_data['role']=User.Roles.STUDENT
-        return User.objects.create_user(**validate_data)
+    # def create(self, validated_data):
+    #     password = validated_data.pop("password")
+    #     role = validated_data.pop("role")  # Corrected: Retrieve role from validated_data
+    #     # validated_data['password'] = make_password(password)
+    #     return User.objects.create_user(role=role, **validated_data)
+
+    # def create(self, validate_data):
+    #     validate_data['role']=User.role
+    #     return User.objects.create_user(**validate_data)
 
 
 
