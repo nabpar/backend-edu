@@ -4,7 +4,7 @@ from django.db.models.fields.related import ForeignKey
 from django.forms.models import ModelChoiceField
 from django.http.request import HttpRequest
 from .file_upload import Uploader
-from .models import Category,Subject,Syllabus,Topic,Subtopic
+from .models import Category,Subject,Syllabus,Topic
 
  
 # Register your models here.
@@ -44,25 +44,25 @@ class Admin_Topic(admin.ModelAdmin):
 admin.site.register(Topic,Admin_Topic)       
 
 
-class Admin_Subtopic(admin.ModelAdmin):
-       list_display = ['id','name','category','subject','topic','date_created','date_updated','slug']
+# class Admin_Subtopic(admin.ModelAdmin):
+#        list_display = ['id','name','category','subject','topic','date_created','date_updated','slug']
        
-       def formfield_for_foreignkey(self, db_field: ForeignKey[Any], request: HttpRequest | None, **kwargs: Any) -> ModelChoiceField | None:
-             if db_field.name== 'subject':
-                   category_id = request.POST.get('category')
-                   if category_id:
-                         kwargs['queryset'] = Subject.objects.filter(category_id=category_id)
-                   else:     
-                         kwargs['queryset']= Subject.objects.none()
-             elif db_field.name == 'topic':
-               subject_id = request.POST.get('subject')
-               if subject_id:
-                     kwargs['queryset'] = Topic.objects.filter(subject_id=subject_id)
-               else:
-                     kwargs['queryset'] = Topic.objects.none()            
-             return super().formfield_for_foreignkey(db_field, request, **kwargs)
+#        def formfield_for_foreignkey(self, db_field: ForeignKey[Any], request: HttpRequest | None, **kwargs: Any) -> ModelChoiceField | None:
+#              if db_field.name== 'subject':
+#                    category_id = request.POST.get('category')
+#                    if category_id:
+#                          kwargs['queryset'] = Subject.objects.filter(category_id=category_id)
+#                    else:     
+#                          kwargs['queryset']= Subject.objects.none()
+#              elif db_field.name == 'topic':
+#                subject_id = request.POST.get('subject')
+#                if subject_id:
+#                      kwargs['queryset'] = Topic.objects.filter(subject_id=subject_id)
+#                else:
+#                      kwargs['queryset'] = Topic.objects.none()            
+#              return super().formfield_for_foreignkey(db_field, request, **kwargs)
            
-admin.site.register(Subtopic,Admin_Subtopic)       
+# admin.site.register(Subtopic,Admin_Subtopic)       
 
 
 class Admin_Syllabus(admin.ModelAdmin):

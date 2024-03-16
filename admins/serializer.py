@@ -1,4 +1,4 @@
-from .models import Category,Subject,Syllabus,ContactLeads,Topic,Subtopic
+from .models import Category,Subject,Syllabus,ContactLeads,Topic
 from rest_framework import serializers
 from .file_upload import Uploader
 
@@ -102,10 +102,10 @@ class Topic_Serializer(serializers.ModelSerializer):
 
 # Subtopic serializer        
 
-class Subtopic_Serializer(serializers.ModelSerializer):
-    class Meta:
-        model = Subtopic
-        fields = '__all__' 
+# class Subtopic_Serializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Subtopic
+#         fields = '__all__' 
 
 # Syllabus Serializer
 class Syllabus_Serializer(serializers.ModelSerializer):
