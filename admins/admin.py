@@ -30,7 +30,7 @@ admin.site.register(Subject,Admin_Subject)
 
 
 class Admin_Topic(admin.ModelAdmin):
-       list_display = ['id','name','date_created','date_updated']
+       list_display = ['id','category','subject','topic_content','added_by','updated_by','status','date_created','date_updated']
 
        def formfield_for_foreignkey(self, db_field: ForeignKey[Any], request: HttpRequest | None, **kwargs: Any) -> ModelChoiceField | None:
              if db_field.name =='subject':

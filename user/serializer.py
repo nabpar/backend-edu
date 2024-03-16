@@ -1,4 +1,4 @@
-from .models import Teacher,Student
+from .models import Teacher,Student,TopicContent
 from rest_framework import serializers
 
 
@@ -9,6 +9,11 @@ class Teacher_Serializer(serializers.ModelSerializer):
         model = Teacher
         fields = '__all__'
 
+
+class TopicContent_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopicContent
+        fields = '__all__'
 
 class Student_Serializer(serializers.ModelSerializer):
     class Meta:

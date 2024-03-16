@@ -1,6 +1,8 @@
 from django.db import models
 from .base_class import BaseClass
 from django.utils.text import slugify
+from user.models import Teacher,TopicContent
+
 
 # Create your models here.
 class Category(BaseClass):
@@ -25,7 +27,6 @@ class Category(BaseClass):
     def __str__(self):
         return self.name    
   
-    
 
 class Subject(BaseClass):
     code = models.IntegerField(unique=True)   
@@ -35,25 +36,38 @@ class Subject(BaseClass):
 
     def __str__(self):
         return self.name   
-    
-
 
 class Topic(BaseClass):
+
+    class Select(models.TextChoices):
+        unverify = 'unverify'
+        verify = 'verify'
+
     category = models.ForeignKey(Category, on_delete= models.CASCADE,default=1)
     subject = models.ForeignKey(Subject, on_delete= models.CASCADE,default=1)
-    # name
-    # content = 
-    # added_by = teacher
-    # updated_by
+    # topics = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "topics_from_teacher",null = True,blank = True)
+    topic_content = models.OneToOneField(TopicContent, on_delete = models.CASCADE,related_name = "content_from_teacher",blank = True,null = True)
+    # name = models.CharField(max_length = 255 , blank = True,null= True)
+    # content =  models.TextField(blank = True,null = True)
+    added_by = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "updated_by_teacher",blank = True,null = True)
+    updated_by = models.CharField(max_length = 255,blank = True,null = True)
     # status = enum  verify unverified default un verified.
+    status = models.CharField(choices =Select.choices,max_length = 255,null = True,blank = True,default = Select.unverify)
+    # date_created = models.DateTimeField(auto_now_add = True)
+    # date_updated = models.DateTimeField(auto_now = True)
     # publish = 
     # un_publish
     # publis
 
 
 
+    # def __str__(self):
+    #     return self.name
     def __str__(self):
-        return self.name
+        return self.added_by.teacher_name.name
+    
+    def __ster__(self):
+        return self.topics.topic
 
     class Meta(BaseClass.Meta):
         db_table = "admins_topic"

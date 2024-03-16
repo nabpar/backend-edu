@@ -1,5 +1,5 @@
 from django.db import models
-from .models import Category,Subject
+# from .models import Category,Subject
 
 # def CourseFiles(instance,filename):
 #     return 'user_{0}/{1}'.format(instance.User.id,filename)
@@ -12,9 +12,9 @@ def ImgFile(instance,filename):
     return "imgfiles/{filename}".format(filename=filename)
 
 class Uploader(models.Model):
-    category = models.ForeignKey(Category,on_delete=models.CASCADE,null=True)
+    category = models.ForeignKey('admins.Category',on_delete=models.CASCADE,null=True)
     subject = models.ForeignKey(
-        Subject,
+        'admins.Subject',
         on_delete=models.CASCADE,
         null=True,
         )
