@@ -2,12 +2,15 @@ from django.db.models import Q,Case, When, Value, IntegerField
 from django.db.models.functions import Length
 
 from  rest_framework import generics,filters
-from .serializer import Category_Serializer,Subject_Serializer,Syllabus_Serializer,Search_Serializer,Uploader_serializer,Contact_Serializer,Topic_Serializer
+from .serializer import Category_Serializer,Subject_Serializer,Syllabus_Serializer,Search_Serializer,Uploader_serializer,Contact_Serializer,Topic_Serializer,Topic_SerializerContents
 from .models import Category,Subject,Syllabus,ContactLeads,Topic
 from rest_framework.filters import SearchFilter,OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from .file_upload import Uploader
 from django.views.decorators.clickjacking import xframe_options_exempt
+from user.models import TopicContent
+from rest_framework.response import Response
+from EduAid.pagination import Pagination
 
 # Create your views here.
 
@@ -32,6 +35,7 @@ class List_Category_view(generics.ListAPIView):
     serializer_class = Category_Serializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     search_fields = ["name"]
+    pagination_class = Pagination
 
 
 
@@ -53,11 +57,13 @@ class Create_Subject_View(generics.CreateAPIView):
 class Get_Subject_View(generics.RetrieveAPIView):
     queryset=Subject.objects.all()
     serializer_class=Subject_Serializer
+    pagination_class = Pagination
 
 class List_Subject_view(generics.ListAPIView):
     queryset = Subject.objects.all()
     serializer_class = Subject_Serializer
     filterset_fields = ('category','name')
+    pagination_class = Pagination
 
 
 
@@ -93,7 +99,32 @@ class Delete_Topic_View(generics.DestroyAPIView):
     queryset = Topic.objects.all()
     serializer_class = Topic_Serializer
 
+
+#...................... creating views for the topic content which can view the content added by the teacher and can update ..............................
+class TopicContentView_ByAdmin(generics.ListAPIView):
+    queryset = TopicContent.objects.all()
+    serializer_class = Topic_SerializerContents
+
+    # def get_queryset(self,request,teacher_name,format = None):
+    #     queryset = TopicContent.objects.get(name = teacher_name)
+
+    #     return Response(queryset)
+
+    # def __str__(self,request,teacher_name):
+    #         request = TopicContent.objects.get(name = teacher_name)
+    # return Response (request.name)
+class TopicContentUpdate_ByAdmin(generics.UpdateAPIView):
+    queryset = TopicContent.objects.all()
+    serializer_class = Topic_SerializerContents    
+
+
+
+
+
+
 # # For Sub_Topic
+    
+
 
 # class Create_Subtopic_View(generics.CreateAPIView):
 #     queryset= Subtopic.objects.all()

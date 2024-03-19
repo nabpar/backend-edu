@@ -1,6 +1,9 @@
 from .models import Category,Subject,Syllabus,ContactLeads,Topic
 from rest_framework import serializers
 from .file_upload import Uploader
+from user.serializer import TopicContent_Serializer
+from user.models import TopicContent
+from rest_framework.response import Response
 
 # Category Serialization
 
@@ -94,11 +97,38 @@ class Subject_Serializer(serializers.ModelSerializer):
 
 
 #Topic Serialization
+        
+class Topic_SerializerContents(serializers.ModelSerializer):
+    # topic_content = TopicContent_Serializer()
+
+    # user_name = serializers.SerializerMethodField()
+
+    # def get_user_name(self,obj):
+    #     return obj.user.name
+    class Meta:
+        model = TopicContent
+        fields = ["teacher_name","category","subject","topic", "content","file_upload","date_created","date_updated"]   
+        # depth = 1
+        # fields = '__all__'
+
+        # def __str__(self):
+        #     return self.teacher_name.name
+        def get_queryset(self,request,teacher_name,format = None):
+            queryset = TopicContent.objects.get(name = teacher_name)
+
+            return Response(queryset)
+        
+
+    # def __str__(self):
+    #     return self.topic_content          
 
 class Topic_Serializer(serializers.ModelSerializer):
+    
+
     class Meta:
         model =  Topic
-        fields = '__all__' 
+        fields = '__all__'
+        # fields = ["category","subject","topic_content","added_by","updated_by","status",]
 
 # Subtopic serializer        
 

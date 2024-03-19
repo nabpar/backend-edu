@@ -9,6 +9,7 @@ from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from django.db.models import Case, When, Value, CharField
+from EduAid.pagination import Pagination
 
 # Create your views here
 
@@ -77,10 +78,12 @@ class SearchList(generics.ListAPIView):
 class View_Blog(generics.ListAPIView):
     queryset = Blog.objects.all()
     serializer_class = Blog_Serializer
+    pagination_class = Pagination
  
 class Retrieve_Blog(generics.RetrieveAPIView):
     queryset=Blog.objects.all()
     serializer_class = Blog_Serializer
+    pagination_class = Pagination
 
 
 class Create_Blog(generics.CreateAPIView):

@@ -12,6 +12,10 @@ from rest_framework.generics import get_object_or_404,Http404
 class Teacher_View(APIView):
     permission_classes = [IsAdminUser]
 
+    def get_queryset(self):
+        req = TopicContent.objects.all()
+        return req
+
     def post(self,request,format = None):
         serializer = Teacher_Serializer(data= request.data)
         if serializer.is_valid():
@@ -22,9 +26,20 @@ class Teacher_View(APIView):
 
 
     def get(self,request,format = None):
-        request = Teacher_Serializer.objects.all()
-        serializer = Teacher_Serializer(request,many = True)
-        return Response(serializer.data)
+        id  = request.query_params["id"]
+        if id != None:
+            request = TopicContent.objects.get(id)
+            serializer = TopicContent_Serializer(request)
+
+        else:
+            request = self.get_queryset()
+            serializer = TopicContent_Serializer(request,many = True)
+            return request
+
+
+        # request = Teacher_Serializer.objects.all()
+        # serializer = Teacher_Serializer(request,many = True)
+        # return Response(serializer.data)
     
 
     def put(self,request,pk, format = None):
@@ -74,6 +89,18 @@ class StudentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView)
 #         serializer = TopicContent_Serializer(request,many = True)
    
 #         return Response(serializer.data)
+    
+
+    # def get(self,request,format = None):
+    #     id  = request.query_params["id"]
+    #     if id != None:
+    #         request = TopicContent.objects.get(id)
+    #         serializer = TopicContent_Serializer(request)
+
+    #     else:
+    #         request = self.get_queryset()
+    #         serializer = TopicContent_Serializer(request,many = True)
+    #         return request
         
 #     def put(self,request,id,format = None):
 #         request =  self.get_object(id)

@@ -2,6 +2,7 @@ from django.urls import path,include
 from rest_framework.routers import DefaultRouter
 # from .views import Create_Category_View,List_Category_view,Update_Category_View,Delete_Category_View,List_Syllabus_view
 from . import views
+# from .views import TopicContentUpdate_ByAdmin,TopicContentView_ByAdmiin
 
 
 
@@ -40,7 +41,13 @@ urlpatterns = [
     path('view_topics/',views.List_Topic_view.as_view(),name="topic_view"),
     path('update_topics/<int:pk>/',views.Update_Topic_View.as_view(),name="Update_Topic"),
     path('delete_topics/<int:pk>/',views.Delete_Topic_View.as_view(),name="Delete_Topic"),
+   
+   
+   # For the topic COntent Views for Admin
 
+   path('list_topic_contents_by_admin/',views.TopicContentView_ByAdmin.as_view(),name = "list contents"),
+   # path("list_topic_content_by_id/<int:pk>/",views.TopicContentView_ByAdmin.as_view(),name = "list_topic_content_by id"),
+   path('update_topic_contents_by_admin/<int:pk>/',views.TopicContentUpdate_ByAdmin.as_view(),name = "update_topic_content"),  
 
    #   # For Subtopic
    #  path('create_subtopics/',views.Create_Subtopic_View.as_view(),name="Create_Subtopic"),

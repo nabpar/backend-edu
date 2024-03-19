@@ -117,15 +117,16 @@ class UserLoginView(APIView):
             user = authenticate(email=email, password=password)
             if user is not None:
                
-                # token = get_tokens_for_user(user)
+                token = get_tokens_for_user(user)
+                
                 if user.role == User.Roles.STUDENT:
-                    return Response({"msg": "Login successful for student"}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for student","token":token}, status=status.HTTP_200_OK)
                 
                 elif user.role== User.Roles.ADMIN:
-                    return Response({"msg": "Login successful for admin"}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for admin","token":token}, status=status.HTTP_200_OK)
                 
                 elif user.role == User.Roles.TEACHER :
-                    return Response({"msg": "Login successful for teacher"}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for teacher","token":token}, status=status.HTTP_200_OK)
                 else:
                     return Response({"msg":"user role is unknown"}, status=status.HTTP_403_FORBIDDEN)
             else:       

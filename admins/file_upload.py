@@ -31,6 +31,7 @@ class Uploader(models.Model):
     
 
     def get_subject_by_id(category_id):
+        from admins.models import Subject
         if category_id:
             return Subject.objects.filter(category=category_id)
         else:

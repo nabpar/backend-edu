@@ -37,35 +37,46 @@ class Subject(BaseClass):
     def __str__(self):
         return self.name   
 
-class Topic(models.Model):
+class Topic(BaseClass):
 
-    class Select(models.TextChoices):
-        unverify = 'unverify'
-        verify = 'verify'
+    # class Select(models.TextChoices):
+    #     unverify = 'unverify'
+    #     verify = 'verify'
 
-    category = models.ForeignKey(Category, on_delete= models.CASCADE,default=1)
-    subject = models.ForeignKey(Subject, on_delete= models.CASCADE,default=1)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete= models.CASCADE)
     # topics = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "topics_from_teacher",null = True,blank = True)
-    topic_content = models.OneToOneField(TopicContent, on_delete = models.CASCADE,related_name = "content_from_teacher",blank = True,null = True)
+    topic_content = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "content_from_teacher",blank = True,null = True)
     name = models.CharField(max_length = 255 , blank = True,null= True)
     # content =  models.TextField(blank = True,null = True)
-    added_by = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "updated_by_teacher",blank = True,null = True)
-    updated_by = models.CharField(max_length = 255,blank = True,null = True)
+    # added_by = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "updated_by_teacher",blank = True,null = True)
+    # updated_by = models.CharField(max_length = 255,blank = True,null = True)
     # status = enum  verify unverified default un verified.
-    status = models.CharField(choices =Select.choices,max_length = 255,null = True,blank = True,default = Select.unverify)
-    date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
-    date_updated = models.DateTimeField(auto_now_add=True,null=True,blank=True)
+    # status = models.CharField(choices =Select.choices,max_length = 255,null = True,blank = True,default = Select.unverify)
+    # date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
+    # date_updated = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     # publish = 
     # un_publish
     # publis
+    def __str__(self):
+        return self.topic_content.content
 
+
+
+    def get_subject_by_id(category_id):
+        if category_id:
+            return Subject.objects.filter(category = category_id)
+        else:
+            return Subject.objects.filter.none()
 
 
     # def __str__(self):
-    #     return self.name
-    def __str__(self):
-        return self.added_by.teacher_name
+    #     return self.added_by.teacher_name.name
+    
 
+    # def __str__(self):
+    #     return self.topic_content.content if self.topic_content else "no content available"
+    
     class Meta(BaseClass.Meta):
         db_table = "admins_topic"
 

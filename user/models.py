@@ -1,6 +1,5 @@
 # from django.db import models
 # from Accounts.models import User
-# from admins.models import Category,Subject,Topic,Subtopic
 # from admins.file_upload import Uploader
 
 # # Create your models here.
@@ -103,6 +102,7 @@ class Teacher(models.Model):
 
 
     def get_subject_by_id(category_id):
+        from admins.models import Subject
         if category_id:
             return Subject.objects.filter(category = category_id)
         
@@ -110,11 +110,13 @@ class Teacher(models.Model):
             return Subject.objects.none()
         
     def get_topic_by_id(subject_id):
+        from admins.models import Topic
         if subject_id:
             return Topic.objects.filter(subject = subject_id)
 
         else:
             return Topic.objects.none()
+    # def get_    
 
 
     # def get_subtopic_by_id(topic_id):
@@ -140,8 +142,18 @@ class TopicContent(models.Model):
     # publish = 
     # un_publish
     # publis
-    # def __str__(self):
-    #     return f"content added by{self.user.name}")
+
+    
+    def __str__(self):
+        return f"{self.category}-{self.subject}"
+    
+
+    def get_subject_by_id(category_id):
+        from admins.models import Subject
+        if category_id:
+            return Subject.objects.filter(category = category_id)
+        else:
+            return Subject.objects.filter.none()
 
     def __str__(self):
         return self.teacher_name.name
