@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import user.models
+import admins.models
 
 
 class Migration(migrations.Migration):
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=64)),
                 ('topic', models.TextField()),
                 ('content', models.TextField()),
-                ('file_upload', models.FileField(blank=True, null=True, upload_to=user.models.TopicFiles)),
+                ('file_upload', models.FileField(blank=True, null=True, upload_to=admins.models.TopicFiles)),
                 ('date_created', models.DateTimeField(auto_now_add=True, null=True)),
                 ('date_updated', models.DateTimeField(auto_now_add=True, null=True)),
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='admins.category')),

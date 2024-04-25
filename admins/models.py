@@ -1,8 +1,8 @@
+from typing import Iterable
 from django.db import models
 from .base_class import BaseClass
 from django.utils.text import slugify
-from user.models import Teacher,TopicContent
-
+from Accounts.models import User
 
 # Create your models here.
 class Category(BaseClass):
@@ -39,56 +39,51 @@ class Subject(BaseClass):
 
 class Topic(BaseClass):
 
-    # class Select(models.TextChoices):
-    #     unverify = 'unverify'
-    #     verify = 'verify'
-
     category = models.ForeignKey(Category, on_delete= models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete= models.CASCADE)
-    # topics = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "topics_from_teacher",null = True,blank = True)
-    topic_content = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "content_from_teacher",blank = True,null = True)
-    name = models.CharField(max_length = 255 , blank = True,null= True)
-    # content =  models.TextField(blank = True,null = True)
-    # added_by = models.OneToOneField(TopicContent,on_delete = models.CASCADE,related_name = "updated_by_teacher",blank = True,null = True)
-    # updated_by = models.CharField(max_length = 255,blank = True,null = True)
-    # status = enum  verify unverified default un verified.
-    # status = models.CharField(choices =Select.choices,max_length = 255,null = True,blank = True,default = Select.unverify)
-    # date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
-    # date_updated = models.DateTimeField(auto_now_add=True,null=True,blank=True)
-    # publish = 
-    # un_publish
-    # publis
+    name = models.CharField(max_length = 255 )
+    assign_to = models.ForeignKey(User, on_delete = models.CASCADE,related_name='assigned_topics')
+
     def __str__(self):
-        return self.topic_content.content
-
-
+        return f"{self.category.name}-{self.subject.name}-{self.name}"
+    
 
     def get_subject_by_id(category_id):
         if category_id:
             return Subject.objects.filter(category = category_id)
         else:
             return Subject.objects.filter.none()
-
-
-    # def __str__(self):
-    #     return self.added_by.teacher_name.name
-    
-
-    # def __str__(self):
-    #     return self.topic_content.content if self.topic_content else "no content available"
     
     class Meta(BaseClass.Meta):
         db_table = "admins_topic"
 
 
-# class Subtopic(BaseClass):
-#     category=models.ForeignKey(Category,on_delete=models.CASCADE)
-#     subject=models.ForeignKey(Subject,on_delete=models.CASCADE)
-#     topic=models.ForeignKey(Topic,on_delete=models.CASCADE)
-#     slug=models.SlugField(blank= True, null= True)
+def TopicFiles(instance,filename):
+    return "topic_content_files/{filename}".format(filename=filename)
 
-#     def __str__(self):
-#         return self.name
+class TopicContent(models.Model):
+    class Status(models.TextChoices):
+        DRAFT='DRAFT','DRAFT'
+        REVIEW='REVIEW','REVIEW'
+        REJECTED='REJECTED','REJECTED'
+        PUBLISHED='PUBLISHED','PUBLISHED'
+
+    topic = models.OneToOneField(Topic,on_delete=models.CASCADE,related_name='content')
+    content =  models.TextField()
+    file_upload = models.FileField(upload_to=TopicFiles,blank=True,null = True)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    status=models.CharField(max_length=15,choices=Status.choices,default=Status.DRAFT)
+    status_message=models.CharField(max_length=255,null=True,blank=True)
+
+    
+    def __str__(self):
+        return f"{self.category}-{self.subject}"
+    
+
+    def __str__(self):
+        return self.teacher_name.name
+
  
     
 class Syllabus(BaseClass):

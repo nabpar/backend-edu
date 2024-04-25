@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 from EduAid.validatino import isalphavalidator,isimagevalidator
-
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
@@ -42,6 +42,14 @@ class UserManager(BaseUserManager):
         # user.is_superuser=True
         user.save(using=self._db)
         return user
+def Contact_Validate(value):
+    contact = str(value)
+    print("Contact:", contact)
+    print("Starts with '98' or '97'?", contact.startswith('98') or contact.startswith('97'))
+    print("Length is not 10?", len(contact) != 10)
+    
+    if (contact.startswith('98') or contact.startswith('97')) and  len(contact) != 10 :
+        raise ValidationError("the contact number should starts with 98 or 97 and should be of 10 digits.")
 
 
 class User(AbstractBaseUser):
@@ -58,7 +66,7 @@ class User(AbstractBaseUser):
        
     )
     name = models.CharField(max_length=64, validators=[isalphavalidator])
-    contact = models.BigIntegerField(blank=True,null=True)
+    contact = models.BigIntegerField(blank=True,null=True,validators = [Contact_Validate])
     role = models.CharField(choices=Roles.choices,max_length=10,default = Roles.STUDENT)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

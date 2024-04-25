@@ -39,15 +39,20 @@ urlpatterns = [
         # For Topic
     path('create_topics/',views.Create_Topic_View.as_view(),name="Create_Topic"),
     path('view_topics/',views.List_Topic_view.as_view(),name="topic_view"),
+    path('view_topics/<int:pk>/',views.Retrieve_Topic_View.as_view(),name="topic_view_one"),
     path('update_topics/<int:pk>/',views.Update_Topic_View.as_view(),name="Update_Topic"),
     path('delete_topics/<int:pk>/',views.Delete_Topic_View.as_view(),name="Delete_Topic"),
+    path('assigned_topics/',views.Assigned_TopiContentList.as_view(),name="Assigned_Topics"),
    
+    path('topic_contents/',views.TopicContent_LC_View.as_view(),name="list_view"),
+    path('topic_contents/<int:pk>/',views.TopicContent_RUD_View.as_view(),name="retrieve_view"),
+
    
    # For the topic COntent Views for Admin
 
-   path('list_topic_contents_by_admin/',views.TopicContentView_ByAdmin.as_view(),name = "list contents"),
-   # path("list_topic_content_by_id/<int:pk>/",views.TopicContentView_ByAdmin.as_view(),name = "list_topic_content_by id"),
-   path('update_topic_contents_by_admin/<int:pk>/',views.TopicContentUpdate_ByAdmin.as_view(),name = "update_topic_content"),  
+   # path('list_topic_contents_by_admin/',views.TopicContentView_ByAdmin.as_view(),name = "list contents"),
+   # # path("list_topic_content_by_id/<int:pk>/",views.TopicContentView_ByAdmin.as_view(),name = "list_topic_content_by id"),
+   # path('update_topic_contents_by_admin/<int:pk>/',views.TopicContentUpdate_ByAdmin.as_view(),name = "update_topic_content"),  
 
    #   # For Subtopic
    #  path('create_subtopics/',views.Create_Subtopic_View.as_view(),name="Create_Subtopic"),

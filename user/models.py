@@ -1,6 +1,7 @@
 # from django.db import models
 # from Accounts.models import User
 # from admins.file_upload import Uploader
+from admins.models import Topic
 
 # # Create your models here.
 
@@ -73,8 +74,6 @@ from admins.base_class import BaseClass
 
 # Create your models here.
 
-def TopicFiles(instance,filename):
-    return "topic_content_files/{filename}".format(filename=filename)
 
 
 # class Teacher(models.Model):
@@ -93,7 +92,6 @@ class Teacher(models.Model):
     course = models.ForeignKey('admins.Category',on_delete = models.CASCADE,blank = True)
     subject = models.ForeignKey('admins.Subject', on_delete = models.CASCADE,blank = True)
     topic = models.ForeignKey('admins.Topic', on_delete = models.CASCADE,blank = True)
-    # subtopic = models.ForeignKey(Subtopic,on_delete = models.CASCADE,blank = True)
 
     def __str__(self):
         return self.user.name
@@ -126,42 +124,6 @@ class Teacher(models.Model):
     #         return Subtopic.objects.none()        
 
 
-class TopicContent(models.Model):
-    # teacher = models.ForeignKey(User, on_delete  = models.CASCADE, related_name = "teacher_name")
-    teacher_name = models.ForeignKey(User, on_delete = models.CASCADE,blank = True,null = True)
-    category = models.ForeignKey('admins.Category', on_delete= models.CASCADE)
-    subject = models.ForeignKey('admins.Subject', on_delete= models.CASCADE)
-    topic = models.TextField()
-    content =  models.TextField()
-    file_upload = models.FileField(upload_to=TopicFiles,blank=True,null = True)
-    date_created = models.DateTimeField(auto_now_add=True,blank=True,null=True)
-    date_updated = models.DateTimeField(auto_now_add=True,null=True,blank=True)
-    # added_by = models.ForeignKey('Accounts.User', on_delete = models.CASCADE,blank = True,null = True)
-    # updated_by
-    # status = enum  verify unverified default un verified.
-    # publish = 
-    # un_publish
-    # publis
-
-    
-    def __str__(self):
-        return f"{self.category}-{self.subject}"
-    
-
-    def get_subject_by_id(category_id):
-        from admins.models import Subject
-        if category_id:
-            return Subject.objects.filter(category = category_id)
-        else:
-            return Subject.objects.filter.none()
-
-    def __str__(self):
-        return self.teacher_name.name
-    # def __str__(self):
-    #     if self.teacher_name:
-    #         return f" content added by, {self.teacher_name.name}"
-    #     else:
-    #         return "Content added without specifying teacher" 
 
 
 

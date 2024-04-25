@@ -1,5 +1,6 @@
-from .models import Teacher,Student,TopicContent
+from .models import Teacher,Student
 from rest_framework import serializers
+from admins.serializer import Topic_Serializer
 
 
 
@@ -10,19 +11,7 @@ class Teacher_Serializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TopicContent_Serializer(serializers.ModelSerializer):
-    # teacher_name= serializers.SerializerMethodField()
-
-    class Meta:
-        model = TopicContent
-        # fields = ["teacher_name","category","subject","topic","content","file_upload","date_created","data_updated"]
-        fields = '__all__'
         
-
-    
-
-
-
 
 class Student_Serializer(serializers.ModelSerializer):
     class Meta:

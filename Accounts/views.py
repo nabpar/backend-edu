@@ -4,13 +4,13 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import send_mail
 from Accounts.renderers import UserRenderer
 from .models import User
 from .utils import Util
 from Accounts.serializers import (
-
     UserLoginSerializer,
     UserPasswordChangeSerializer,
     PasswordResetSerializer,
@@ -18,7 +18,8 @@ from Accounts.serializers import (
     UserPasswordResetSerializer,
     UserProfileSerializer,
     UserSerializer,
-    ProfileSerializer
+    ProfileSerializer,
+    TeacherUserSerializer
 )
 
 
@@ -120,13 +121,13 @@ class UserLoginView(APIView):
                 token = get_tokens_for_user(user)
                 
                 if user.role == User.Roles.STUDENT:
-                    return Response({"msg": "Login successful for student","token":token}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for student","token":token,"role":user.role}, status=status.HTTP_200_OK)
                 
                 elif user.role== User.Roles.ADMIN:
-                    return Response({"msg": "Login successful for admin","token":token}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for admin","token":token,"role":user.role}, status=status.HTTP_200_OK)
                 
                 elif user.role == User.Roles.TEACHER :
-                    return Response({"msg": "Login successful for teacher","token":token}, status=status.HTTP_200_OK)
+                    return Response({"msg": "Login successful for teacher","token":token,"role":user.role}, status=status.HTTP_200_OK)
                 else:
                     return Response({"msg":"user role is unknown"}, status=status.HTTP_403_FORBIDDEN)
             else:       
@@ -242,3 +243,9 @@ class UserPasswordResetView(APIView):
                     return Response({"msg":"user role is unknown"},status=status.HTTP_403_FORBIDDEN)
             else:
                 return Response({"msg":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)    
+            
+
+class TeacherUserListView(ListAPIView):
+    queryset = User.objects.filter(role=User.Roles.TEACHER)
+    serializer_class = TeacherUserSerializer
+    permission_classes = [IsAuthenticated] 

@@ -12,10 +12,14 @@ from .models import User
 from .profile import Profile
 
 
-
+# def Contact_Validate(value):
+#     contact = str(value)
+#     if (contact.startswith('98') or contact.startswith('97')) or len(contact) != 10 :
+#         raise serializers.ValidationError("the contact number should starts with 98 or 97 and should be of 10 digits.")
 
 class UserSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={"input_type": "password"})
+    # contact = serializers.IntegerField(validators = [Contact_Validate])
 
     class Meta:
         model = User
@@ -203,3 +207,11 @@ class UserPasswordResetSerializer(serializers.Serializer):
         except DjangoUnicodeDecodeError as identifier:
             PasswordResetTokenGenerator().check_token(user, token)
             raise serializers.ValidationError("token is not valid or expaired")
+
+
+class TeacherUserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = ["email","id","name"]
+

@@ -1,8 +1,6 @@
-from .models import Category,Subject,Syllabus,ContactLeads,Topic
+from .models import Category,Subject,Syllabus,ContactLeads,Topic,TopicContent
 from rest_framework import serializers
 from .file_upload import Uploader
-from user.serializer import TopicContent_Serializer
-from user.models import TopicContent
 from rest_framework.response import Response
 
 # Category Serialization
@@ -17,7 +15,7 @@ class Search_Serializer(serializers.ModelSerializer):
 
 class Category_Serializer(serializers.ModelSerializer):
 
-    image=serializers.SerializerMethodField()
+    image=serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Category
@@ -39,11 +37,11 @@ class Category_Serializer(serializers.ModelSerializer):
 # subject Serialization
 
 class Subject_Serializer(serializers.ModelSerializer):
-    category_name = serializers.SerializerMethodField()
-    image=serializers.SerializerMethodField()
-    syllabus_url=serializers.SerializerMethodField()
-    syllabus_embed=serializers.SerializerMethodField()
-    other_files=serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField(read_only=True)
+    image=serializers.SerializerMethodField(read_only=True)
+    syllabus_url=serializers.SerializerMethodField(read_only=True)
+    syllabus_embed=serializers.SerializerMethodField(read_only=True)
+    other_files=serializers.SerializerMethodField(read_only=True)
 
 
     def get_category_name(self,obj):
@@ -101,7 +99,7 @@ class Subject_Serializer(serializers.ModelSerializer):
 class Topic_SerializerContents(serializers.ModelSerializer):
     # topic_content = TopicContent_Serializer()
 
-    # user_name = serializers.SerializerMethodField()
+    # user_name = serializers.SerializerMethodField(read_only=True)
 
     # def get_user_name(self,obj):
     #     return obj.user.name
@@ -122,7 +120,38 @@ class Topic_SerializerContents(serializers.ModelSerializer):
     # def __str__(self):
     #     return self.topic_content          
 
+
+
 class Topic_Serializer(serializers.ModelSerializer):
+    category_name = serializers.SerializerMethodField(read_only=True)
+    subject_name = serializers.SerializerMethodField(read_only=True)
+    assign_to_name=serializers.SerializerMethodField(read_only=True)
+    content=serializers.SerializerMethodField(read_only=True)
+
+    def get_category_name(self,obj):
+        return obj.category.name
+    
+    def get_subject_name(self,obj):
+        return obj.subject.name
+    
+    def get_assign_to_name(self,obj):
+        return obj.assign_to.name
+    
+    def get_content(self,obj):
+        try:
+            return {
+                'status':obj.content.status,
+                'id':obj.content.id,
+                'message':obj.content.status_message,
+                'data':obj.content.content
+            }
+        except Topic.content.RelatedObjectDoesNotExist:
+            return {
+                'status':'NON_EXISTENT',
+                'id':0,
+                'message':'Data Content not created. Ask admin to resolve this error.',
+                'data':''
+            }
     
 
     class Meta:
@@ -130,17 +159,21 @@ class Topic_Serializer(serializers.ModelSerializer):
         fields = '__all__'
         # fields = ["category","subject","topic_content","added_by","updated_by","status",]
 
-# Subtopic serializer        
+class TopicContent_Serializer(serializers.ModelSerializer):
+    # teacher_name= serializers.SerializerMethodField()
+    topic=Topic_Serializer(read_only=True)
 
-# class Subtopic_Serializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Subtopic
-#         fields = '__all__' 
+    class Meta:
+        model = TopicContent
+        fields = '__all__'
+
+
+
 
 # Syllabus Serializer
 class Syllabus_Serializer(serializers.ModelSerializer):
-    category_name = serializers.SerializerMethodField()
-    subject_name = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField(read_only=True)
+    subject_name = serializers.SerializerMethodField(read_only=True)
 
     def get_category_name(self,obj):
         return obj.category.name
@@ -158,8 +191,8 @@ class Syllabus_Serializer(serializers.ModelSerializer):
  # Uploader serializer 
 
 class Uploader_serializer(serializers.ModelSerializer):
-    category_name = serializers.SerializerMethodField()
-    subject_name = serializers.SerializerMethodField()
+    category_name = serializers.SerializerMethodField(read_only=True)
+    subject_name = serializers.SerializerMethodField(read_only=True)
 
     def get_category_name(self,obj):
         return obj.category.name

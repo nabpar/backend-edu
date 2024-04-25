@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    # "whitenoise.runserver_nostatic",
+    "django.contrib.staticfiles",
 ]
 
 CUSTOM_APPS = [
@@ -53,10 +54,10 @@ CUSTOM_APPS = [
     'Accounts',
     "admins",
     "blog",
-    'srm',
-    'students',
     'tinymce',
-    'user'
+    'srm',
+    'user',
+    'notification'
 
 ]
 INSTALLED_APPS += CUSTOM_APPS
@@ -66,6 +67,7 @@ INSTALLED_APPS += CUSTOM_APPS
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',    ## this is for corseheaders
     'django.middleware.security.SecurityMiddleware',
+    # "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,6 +75,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# STORAGES = {
+#     "staticfiles": {
+#         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+#     },
+# }
+
 
 X_FRAME_OPTIONS = 'ALLOW ALL'
 
@@ -157,11 +166,11 @@ REST_PASSWORD_ENDPOINT='reset-password'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #  this urls gives access to crud operation from frontend
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "https://127.0.0.1:3000",
-    # Add more allowed origins as needed
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "https://127.0.0.1:3000",
+#     # Add more allowed origins as needed
+# ]
 
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -180,8 +189,8 @@ PASSWORD_RESET_TIMEOUT = 2000
 
 # SMPLE JWT
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=200),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
